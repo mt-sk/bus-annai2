@@ -1,0 +1,344 @@
+        /* リセットと基本スタイル */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .current-time {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 16px;
+        }
+        .day-type {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .bus-stop-info {
+            font-size: 14px;
+            color: #555;
+            margin-left: auto;
+            background-color: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        /* メインコンテンツ */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* 次のバス情報 */
+        .next-bus {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .next-bus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .next-bus-header > div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .route-badge {
+            background-color: #1976d2;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+        .route-badge.川51 {
+            background-color: #1976d2; /* 青 */
+        }
+        .route-badge.川55 {
+            background-color: #388e3c; /* 緑 */
+        }
+        .route-badge.川57 {
+            background-color: #e53935; /* 赤 */
+        }
+        .destination {
+            font-weight: bold;
+        }
+
+        .countdown {
+            min-height: 48px; /* 高さを増やす */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: color 0.5s, font-size 0.5s;
+            font-size: 36px; /* フォントサイズを大きく */
+            font-weight: bold; /* 太字に */
+            color: #e53935; /* デフォルトで赤色 */
+            margin: 16px 0; /* 上下の余白を増やす */
+        }
+        .departure-time {
+            font-size: 18px;
+        }
+        
+        /* バスリスト */
+        .bus-list {
+            margin-top: 16px;
+        }
+        .bus-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .bus-item:last-child {
+            border-bottom: none;
+        }
+        .bus-time {
+            font-weight: bold;
+            min-width: 60px;
+        }
+        .bus-route-info {
+            flex-grow: 1;
+            padding: 0 12px;
+        }
+        .minutes-left {
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 14px;
+            color: #555;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        /* フッター */
+        footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        /* 更新ボタン */
+        .refresh-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .refresh-button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .refresh-button:hover {
+            background-color: #1565c0;
+        }
+        .refresh-icon {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* アップロードエリア（開発用） */
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 16px;
+            text-align: center;
+            margin-top: 24px;
+            border-radius: 8px;
+            display: none; /* 通常は非表示 */
+        }
+        .upload-area.show {
+            display: block;
+        }
+        #file-input {
+            display: none;
+        }
+        .upload-button {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        /* アコーディオン */
+        .accordion {
+            cursor: pointer;
+            user-select: none;
+        }
+        .accordion:after {
+            content: '\002B'; /* プラス記号 */
+            float: right;
+            margin-left: 5px;
+        }
+        .accordion.active:after {
+            content: '\2212'; /* マイナス記号 */
+        }
+        .panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+        
+        /* 周辺のバスstyle*/
+         .surrounding-buses {
+            margin-top: 8px;
+        }
+        .prev-next-bus-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .prev-next-bus {
+            padding: 8px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .prev-next-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .prev-next-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .prev-next-info {
+            flex-grow: 1;
+        }
+        .prev-next-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+            font-size: 13px;
+        }
+        .time-info {
+            font-weight: bold;
+        }
+        .minutes-passed {
+            color: #e53935;
+        }
+
+        /* 点滅と発車済みのスタイル*/
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .countdown.blink {
+            animation: blink 1s infinite;
+            color: #f44336; /* 鮮やかな赤に */
+            font-size: 40px; /* さらに大きく */
+        }
+
+        .countdown.departed {
+            color: #9e9e9e;
+            font-size: 28px; /* 少し小さめに */
+        }
+
+        /* 更新中のコンテナにアニメーションを追加 */
+        .next-bus.updating {
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 画像オーバーレイ用 */
+        .bus-stop-highlight {
+            margin-top: 16px;
+            text-align: center;
+        }
+        
+        .bus-stop-map-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .bus-stop-map-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .highlight-overlay {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 4px solid #e53935;
+            background-color: rgba(229, 57, 53, 0.3);
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            pointer-events: none; /* クリックイベントを下の画像に通す */
+            box-shadow: 0 0 10px #e53935, 0 0 20px rgba(229, 57, 53, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        .bus-stop-info-text {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }

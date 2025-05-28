@@ -1,0 +1,643 @@
+/* リセットと基本スタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+.container {
+    max-width: 900px; /* 横並び表示のため幅を拡張 */
+    margin: 0 auto;
+    padding: 16px;
+}
+header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+.current-time {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 16px;
+}
+.day-type {
+    font-weight: bold;
+    color: #1976d2;
+}
+.bus-stop-info {
+    font-size: 14px;
+    color: #555;
+    margin-left: auto;
+    background-color: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* メインコンテンツ */
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.section-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 2つの乗り場を横並びにするレイアウト - 追加 */
+.bus-stops-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .bus-stops-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .container {
+        padding: 12px;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    .current-time {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+    
+    h1 {
+        font-size: 18px;
+    }
+    
+    .card {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .section-title {
+        font-size: 16px;
+    }
+}
+
+.bus-stop-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px; /* パディングを削減 */
+    background-color: #fafafa;
+}
+
+.bus-stop-title {
+    font-size: 15px; /* フォントサイズを調整 */
+    font-weight: bold;
+    margin-bottom: 12px; /* 余白を削減 */
+    text-align: center;
+    color: #1976d2;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 6px; /* パディングを削減 */
+}
+
+/* 次のバス情報 */
+.next-bus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 12px; /* 余白を削減 */
+}
+.next-bus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px; /* 余白を削減 */
+}
+
+.next-bus-header > div {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* ギャップを削減 */
+    flex-wrap: wrap; /* 改行を許可 */
+}
+
+.route-badge {
+    background-color: #1976d2;
+    color: white;
+    padding: 3px 6px; /* パディングを削減 */
+    border-radius: 4px;
+    font-weight: bold;
+    min-width: 50px; /* 幅を削減 */
+    text-align: center;
+    font-size: 12px; /* フォントサイズを削減 */
+}
+.route-badge.川54 {
+    background-color: #388e3c; /* 緑 */
+}
+.route-badge.川55 {
+    background-color: #388e3c; /* 緑 */
+}
+.route-badge.川51 {
+    background-color: #1976d2; /* 青 */
+}
+.route-badge.川53 {
+    background-color: #1976d2; /* 青 */
+}
+.route-badge.川56 {
+    background-color: #e53935; /* 赤 */
+}
+.destination {
+    font-weight: bold;
+    font-size: 13px; /* フォントサイズを調整 */
+}
+
+.countdown {
+    min-height: 40px; /* 高さを削減 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.5s, font-size 0.5s;
+    font-size: 32px; /* フォントサイズを調整 */
+    font-weight: bold;
+    color: #e53935;
+    margin: 8px 0; /* 上下の余白を削減 */
+}
+.departure-time {
+    font-size: 16px;
+    margin-bottom: 8px; /* 余白を追加 */
+}
+
+/* バスリスト */
+.bus-list {
+    margin-top: 16px;
+}
+.bus-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 8px;
+    border-bottom: 1px solid #eee;
+}
+.bus-item:last-child {
+    border-bottom: none;
+}
+.bus-time {
+    font-weight: bold;
+    min-width: 60px;
+}
+.bus-route-info {
+    flex-grow: 1;
+    padding: 0 12px;
+}
+.minutes-left {
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 14px;
+    color: #555;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* フッター */
+footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 12px;
+    color: #777;
+}
+
+/* 更新ボタン */
+.refresh-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+.refresh-button {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+.refresh-button:hover {
+    background-color: #1565c0;
+}
+.refresh-icon {
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+}
+
+/* アップロードエリア（開発用） */
+.upload-area {
+    border: 2px dashed #ccc;
+    padding: 16px;
+    text-align: center;
+    margin-top: 24px;
+    border-radius: 8px;
+    display: none; /* 通常は非表示 */
+}
+.upload-area.show {
+    display: block;
+}
+#file-input {
+    display: none;
+}
+.upload-button {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* アコーディオン */
+.accordion {
+    cursor: pointer;
+    user-select: none;
+}
+.accordion:after {
+    content: '\002B'; /* プラス記号 */
+    float: right;
+    margin-left: 5px;
+}
+.accordion.active:after {
+    content: '\2212'; /* マイナス記号 */
+}
+.panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+/* 周辺のバスstyle*/
+.surrounding-buses {
+    margin-top: 6px; /* 余白を削減 */
+}
+.next-next-bus-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* ギャップを削減 */
+}
+
+/* 次の次のバス - 大きく表示 */
+.prev-next-bus {
+    padding: 6px; /* パディングを削減 */
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 14px; /* 次の次のバスを大きく */
+    font-weight: bold;
+    background-color: #f0f8ff;
+    border: 1px solid #e3f2fd;
+}
+.prev-next-bus .route-badge {
+    font-size: 13px;
+    padding: 4px 6px;
+}
+
+/* おすすめバス表示 */
+.next-bus.recommended-bus,
+.prev-next-bus.recommended-bus {
+    background-color: #e8f5e8 !important;
+    border: 2px solid #4caf50 !important;
+    position: relative;
+}
+.next-bus.recommended-bus::before,
+.prev-next-bus.recommended-bus::before {
+    content: "🚶‍♂️ おすすめ";
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* 急げば間に合うバス表示 */
+.next-bus.rush-possible,
+.prev-next-bus.rush-possible {
+    background-color: #fff3e0 !important;
+    border: 2px solid #ff9800 !important;
+    position: relative;
+}
+.next-bus.rush-possible::before,
+.prev-next-bus.rush-possible::before {
+    content: "🏃‍♂️ 急げば間に合う";
+    position: absolute;
+    top: -10px;
+    right: 8px;
+    background-color: #ff9800;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* 間に合わないバス表示 */
+.next-bus.too-late,
+.prev-next-bus.too-late {
+    opacity: 0.7 !important; /* 0.5から0.7に変更して控えめに */
+    background-color: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    position: relative;
+}
+.next-bus.too-late::after,
+.prev-next-bus.too-late::after {
+    content: "⏰ 間に合わない";
+    position: absolute;
+    top: -10px; /* 位置を調整 */
+    right: 8px;
+    background-color: #757575;
+    color: white;
+    font-size: 11px; /* 9pxから11pxに拡大 */
+    padding: 3px 6px; /* パディングを拡大 */
+    border-radius: 10px; /* 角を丸く */
+    z-index: 10;
+    font-weight: bold; /* 太字に */
+}
+
+.prev-next-title {
+    font-size: 11px; /* フォントサイズを削減 */
+    color: #666;
+    margin-bottom: 3px; /* 余白を削減 */
+}
+.prev-next-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px; /* ギャップを削減 */
+}
+.prev-next-info {
+    flex-grow: 1;
+}
+.prev-next-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; /* ギャップを削減 */
+    margin-top: 2px; /* 余白を削減 */
+    font-size: 11px; /* フォントサイズを削減 */
+}
+.time-info {
+    font-weight: bold;
+}
+.minutes-passed {
+    color: #e53935;
+}
+
+/* 点滅と発車済みのスタイル*/
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.countdown.blink {
+    animation: blink 1s infinite;
+    color: #f44336; /* 鮮やかな赤に */
+    font-size: 40px; /* さらに大きく */
+}
+
+.countdown.departed {
+    color: #9e9e9e;
+    font-size: 28px; /* 少し小さめに */
+}
+
+/* 更新中のコンテナにアニメーションを追加 */
+.next-bus.updating {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+/* 画像オーバーレイ用 - シンプル化 */
+.bus-stop-highlight {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.bus-stop-map-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.bus-stop-map-img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: block;
+    margin: 0 auto;
+}
+
+/* シンプル化したカウントダウンオーバーレイ */
+.countdown-overlay {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid #1976d2;
+    border-radius: 6px;
+    padding: 6px 8px;
+    min-width: 100px;
+    text-align: center;
+    font-size: 11px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+.overlay-title {
+    font-size: 9px;
+    color: #666;
+    margin-bottom: 2px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.overlay-countdown {
+    font-size: 13px;
+    font-weight: bold;
+    color: #1976d2;
+    margin-bottom: 1px;
+    line-height: 1.2;
+}
+
+.overlay-route {
+    font-size: 8px;
+    color: #333;
+    line-height: 1.2;
+}
+
+/* 乗り場位置 - レスポンシブ対応 */
+.yako-position {
+    top: 83%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+}
+
+.shin-position {
+    top: 23%;
+    left: 79%;
+    transform: translate(-50%, -50%);
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+    .countdown-overlay {
+        font-size: 9px;
+        padding: 4px 6px;
+        min-width: 80px;
+        border-radius: 4px;
+    }
+    
+    .overlay-countdown {
+        font-size: 12px;
+    }
+    
+    .overlay-title {
+        font-size: 8px;
+    }
+    
+    .overlay-route {
+        font-size: 8px;
+    }
+    
+    /* モバイルでの位置調整 - 同じ割合を維持 */
+    .yako-position {
+        top: 83%;
+        left: 45%;
+    }
+    
+    .shin-position {
+        top: 23%;
+        left: 79%;
+    }
+}
+
+/* バス時刻表セクション */
+.bus-schedule-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.bus-schedule-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #fafafa;
+}
+
+.bus-schedule-list {
+    max-height: 250px; /* 高さを小さくして表示行数を制限 */
+}
+
+.bus-schedule-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+}
+
+.bus-schedule-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.bus-schedule-time {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.bus-schedule-countdown {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* 発車済み (赤) */
+.bus-schedule-item.departed {
+    background-color: #ffebee;
+}
+
+.bus-schedule-item.departed .bus-schedule-countdown {
+    color: #d32f2f;
+}
+
+/* 間もなく (オレンジ) */
+.bus-schedule-item.soon {
+    background-color: #fff3e0;
+}
+
+.bus-schedule-item.soon .bus-schedule-countdown {
+    color: #e65100;
+}
+
+/* おすすめ (緑) */
+.bus-schedule-item.recommend {
+    background-color: #e8f5e9;
+}
+
+.bus-schedule-item.recommend .bus-schedule-countdown {
+    color: #2e7d32;
+}
+
+/* 余裕あり (青) */
+.bus-schedule-item.plenty {
+    background-color: #e3f2fd;
+}
+
+.bus-schedule-item.plenty .bus-schedule-countdown {
+    color: #1976d2;
+}
+
+.bus-schedule-loading {
+    text-align: center;
+    padding: 20px;
+    color: #757575;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .bus-schedule-container {
+        grid-template-columns: 1fr;
+    }
+}

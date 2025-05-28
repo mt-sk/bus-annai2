@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三興・川崎 バス時刻表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #1976d2;
+        }
+        
+        .current-time {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .day-type {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .directions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .direction-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .direction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        
+        .direction-card a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .card-header {
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .to-kawasaki .card-header {
+            background-color: #1976d2;
+        }
+        
+        .to-sanko .card-header {
+            background-color: #388e3c;
+        }
+        
+        .card-content {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .direction-info {
+            flex: 1;
+            text-align: left;
+            padding-right: 15px;
+        }
+        
+        .direction-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .direction-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .stops-list {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .stops-list span {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .direction-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+        
+        .go-button {
+            margin-top: 15px;
+            display: inline-block;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .to-kawasaki .go-button:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .to-sanko .go-button:hover {
+            background-color: #e8f5e9;
+        }
+        
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                padding: 16px;
+            }
+            
+            .card-header {
+                padding: 12px;
+                font-size: 18px;
+            }
+            
+            .card-content {
+                padding: 15px;
+            }
+            
+            .direction-title {
+                font-size: 16px;
+            }
+            
+            .direction-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>三興・川崎 バス時刻表</h1>
+            <div class="current-time">
+                現在時刻: <span id="current-time">--:--</span>
+                （<span id="day-type" class="day-type">平日</span>）
+            </div>
+        </header>
+        
+        <div class="card">
+            <p>行き先を選択してください</p>
+        </div>
+        
+        <div class="directions-container">
+            <!-- 川崎駅方面 -->
+            <div class="direction-card to-kawasaki">
+                <a href="kawasaki/index.html">
+                    <div class="card-header">川崎駅方面</div>
+                    <div class="card-content">
+                        <div class="direction-info">
+                            <div class="direction-title">三興最寄り発 川崎駅行き</div>
+                            <div class="direction-subtitle">三興方面から川崎駅へ向かうバス</div>
+                            <div class="stops-list">
+                                <span>矢向西町</span>
+                                <span>新鶴見小学校南</span>
+                            </div>
+                            <div class="go-button">時刻表を見る &rarr;</div>
+                        </div>
+                        <div class="direction-icon">🚌</div>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- 三興方面 -->
+            <div class="direction-card to-sanko">
+                <a href="sanko/index.html">
+                    <div class="card-header">三興方面</div>
+                    <div class="card-content">
+                        <div class="direction-info">
+                            <div class="direction-title">川崎駅発 三興方面行き</div>
+                            <div class="direction-subtitle">川崎駅から三興方面へ向かうバス</div>
+                            <div class="stops-list">
+                                <span>矢向西町</span>
+                                <span>新鶴見小学校南</span>
+                            </div>
+                            <div class="go-button">時刻表を見る &rarr;</div>
+                        </div>
+                        <div class="direction-icon">🚍</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>三興・川崎バス時刻表アプリ &copy; 2025</p>
+            <p>※交通状況により遅延する場合があります</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 現在時刻と曜日タイプの更新
+        function updateCurrentTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            document.getElementById('current-time').textContent = `${hours}:${minutes}`;
+            
+            // 曜日タイプの表示（簡易版）
+            const dayOfWeek = now.getDay(); // 0=日曜, 1=月曜, ..., 6=土曜
+            let dayType = "平日";
+            
+            if (dayOfWeek === 0) {
+                dayType = "休日";
+            } else if (dayOfWeek === 6) {
+                dayType = "土曜";
+            }
+            
+            document.getElementById('day-type').textContent = dayType;
+        }
+        
+        // 初期化と1分ごとの更新
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 60000);
+    </script>
+</body>
+</html>

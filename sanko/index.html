@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三興最寄り発 川崎駅行バス時刻表</title>
+    
+    <script>
+        // CSSキャッシュクリア機能
+        function addCacheBuster() {
+            const timestamp = new Date().getTime();
+            const styleLink = document.querySelector('link[rel="stylesheet"]');
+            const href = styleLink.href.split('?')[0]; // 既存のパラメータを除去
+            styleLink.href = href + '?v=' + timestamp;
+        }
+        
+        // ページ読み込み時に自動実行
+        window.addEventListener('load', function() {
+            addCacheBuster();
+        });
+        
+        // 手動でCSSをリフレッシュする関数（デバッグ用）
+        function refreshCSS() {
+            addCacheBuster();
+            console.log('CSSキャッシュをクリアしました');
+        }
+        
+        // 開発モード時のショートカット（Ctrl+Shift+R）
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                e.preventDefault();
+                refreshCSS();
+            }
+        });
+    </script></head>
+<body>
+    <div class="container">
+        <header>
+            <h1>三興最寄り発 川崎駅行バス時刻表</h1>
+            <div class="direction-switcher">
+                <span class="current-direction">川崎駅方面</span>
+            <a href="../kawasaki/index.html" class="switch-direction-btn">川崎駅発に切替</a>
+            </div>
+            <div class="current-time">
+                現在時刻: <span id="current-time">--:--</span>
+                （<span id="day-type" class="day-type">平日</span>）
+            </div>
+        </header>
+        
+        <main>
+            <!-- 2つの乗り場を横並びで表示 -->
+            <section class="card">
+                <h2 class="section-title">次のバス</h2>
+                <div class="bus-stops-container">
+                    <!-- 矢向西町乗り場 -->
+                    <div class="bus-stop-section">
+                        <div class="bus-stop-title">矢向西町</div>
+                        <div class="next-bus" id="next-bus-container-yako">
+                            <div class="next-bus-header">
+                                <div>
+                                    <span class="route-badge" id="next-bus-route-yako">---</span>
+                                    <span class="bus-stop-info" id="next-bus-stop-yako">乗り場: --</span>
+                                </div>
+                            </div>
+                            <div class="countdown" id="countdown-yako">--:--:--</div>
+                            <div class="departure-time">
+                                発車時刻: <span id="next-bus-time-yako">--:--</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 次の次のバス -->
+                        <div class="surrounding-buses">
+                            <div class="next-next-bus-container">
+                                <div class="prev-next-bus" id="next-next-bus-yako">
+                                    <div class="prev-next-title">次の次のバス</div>
+                                    <div class="prev-next-content">
+                                        <span class="route-badge" id="next-next-bus-route-yako">---</span>
+                                        <div class="prev-next-info">
+                                            <div class="prev-next-details">
+                                                <span class="time-info" id="next-next-bus-time-yako">--:--</span>
+                                                <span class="minutes-left" id="next-next-bus-left-yako">---</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 新鶴見小学校南乗り場 -->
+                    <div class="bus-stop-section">
+                        <div class="bus-stop-title">新鶴見小学校南</div>
+                        <div class="next-bus" id="next-bus-container-shin">
+                            <div class="next-bus-header">
+                                <div>
+                                    <span class="route-badge" id="next-bus-route-shin">---</span>
+                                    <span class="bus-stop-info" id="next-bus-stop-shin">乗り場: --</span>
+                                </div>
+                            </div>
+                            <div class="countdown" id="countdown-shin">--:--:--</div>
+                            <div class="departure-time">
+                                発車時刻: <span id="next-bus-time-shin">--:--</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 次の次のバス -->
+                        <div class="surrounding-buses">
+                            <div class="next-next-bus-container">
+                                <div class="prev-next-bus" id="next-next-bus-shin">
+                                    <div class="prev-next-title">次の次のバス</div>
+                                    <div class="prev-next-content">
+                                        <span class="route-badge" id="next-next-bus-route-shin">---</span>
+                                        <div class="prev-next-info">
+                                            <div class="prev-next-details">
+                                                <span class="time-info" id="next-next-bus-time-shin">--:--</span>
+                                                <span class="minutes-left" id="next-next-bus-left-shin">---</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2 class="section-title">バス乗り場案内</h2>
+                <div class="bus-stop-highlight">
+                    <div class="bus-stop-map-container">
+                        <img src="bus_stop_map.jpg" alt="バス乗り場案内図" class="bus-stop-map-img">
+                        <!-- 矢向西町乗り場のオーバーレイ - シンプル化 -->
+                        <div id="yako-countdown-overlay" class="countdown-overlay yako-position">
+                            <div class="overlay-title">矢向西町</div>
+                            <div class="overlay-countdown" id="yako-overlay-countdown">--:--</div>
+                            <div class="overlay-route" id="yako-overlay-route">---</div>
+                        </div>
+                        <!-- 新鶴見小学校南乗り場のオーバーレイ - シンプル化 -->
+                        <div id="shin-countdown-overlay" class="countdown-overlay shin-position">
+                            <div class="overlay-title">新鶴見小学校南</div>
+                            <div class="overlay-countdown" id="shin-overlay-countdown">--:--</div>
+                            <div class="overlay-route" id="shin-overlay-route">---</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- バス時刻表セクションを追加 -->
+            <section class="card">
+                <h2 class="section-title">今後のバス時刻表</h2>
+                <div class="bus-schedule-container">
+                    <!-- 矢向西町乗り場のバス予定 -->
+                    <div class="bus-schedule-section">
+                        <div class="bus-stop-title">矢向西町</div>
+                        <div class="bus-schedule-list" id="yako-schedule-list">
+                            <div class="bus-schedule-loading">読み込み中...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 新鶴見小学校南乗り場のバス予定 -->
+                    <div class="bus-schedule-section">
+                        <div class="bus-stop-title">新鶴見小学校南</div>
+                        <div class="bus-schedule-list" id="shin-schedule-list">
+                            <div class="bus-schedule-loading">読み込み中...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CSVアップロードエリア（開発用） -->
+            <div class="upload-area" id="upload-area">
+                <p>CSVファイルをアップロード（開発用）</p>
+                <input type="file" id="file-input" accept=".csv" multiple>
+                <label for="file-input" class="upload-button">ファイルを選択</label>
+            </div>
+        </main>
+        
+        <footer>
+            <p>三興最寄り発バス時刻表アプリ &copy; 2025</p>
+            <p>※交通状況により遅延する場合があります</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
