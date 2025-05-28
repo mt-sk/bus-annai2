@@ -1,5 +1,5 @@
 // グローバル変数
-let allRoutes = []; // 全てのバス路線データ
+let allRoutes_kawasaki = []; // 全てのバス路線データ
 let isDevMode = false; // 開発モードフラグ
 let isUpdatingInfo = false; // 更新中フラグ - 無限ループ防止用
 
@@ -31,7 +31,7 @@ function initApp() {
     loadDataFromLocalStorage();
     
     // データがなければ、CSVファイルを読み込む
-    if (allRoutes.length === 0) {
+    if (allRoutes_kawasaki.length === 0) {
         loadMultipleRoutes();
     } else {
         // バス情報を更新
@@ -206,14 +206,14 @@ function getCurrentDayType() {
 
 // ローカルストレージからデータ読み込み
 function loadDataFromLocalStorage() {
-    const savedRoutes = localStorage.getItem('allRoutes');
+    const savedRoutes = localStorage.getItem('allRoutes_kawasaki');
     if (savedRoutes) {
         try {
-            allRoutes = JSON.parse(savedRoutes);
-            console.log('ローカルストレージからデータを読み込みました', allRoutes.length);
+            allRoutes_kawasaki = JSON.parse(savedRoutes);
+            console.log('ローカルストレージからデータを読み込みました', allRoutes_kawasaki.length);
         } catch (e) {
             console.error('ローカルストレージのデータを解析できませんでした', e);
-            allRoutes = [];
+            allRoutes_kawasaki = [];
         }
     }
 }
@@ -247,14 +247,14 @@ function loadMultipleRoutes() {
     Promise.all(routeFiles.map(file => loadRouteCSV(file)))
         .then(results => {
             // 全てのルートデータを結合
-            allRoutes = results.flat();
+            allRoutes_kawasaki = results.flat();
             
             // ローカルストレージに保存
-            localStorage.setItem('allRoutes', JSON.stringify(allRoutes));
+            localStorage.setItem('allRoutes_kawasaki', JSON.stringify(allRoutes_kawasaki));
             
             // バス情報を更新
             updateBusInfo();
-            console.log('全てのCSVファイルを読み込みました:', allRoutes.length);
+            console.log('全てのCSVファイルを読み込みました:', allRoutes_kawasaki.length);
         })
         .catch(error => {
             console.error('ファイル読み込みエラー:', error);
@@ -309,7 +309,7 @@ function handleFileSelect(event) {
     const files = event.target.files;
     if (files.length === 0) return;
     
-    allRoutes = []; // リセット
+    allRoutes_kawasaki = []; // リセット
     const filePromises = [];
     
     for (let i = 0; i < files.length; i++) {
@@ -339,15 +339,15 @@ function handleFileSelect(event) {
     Promise.all(filePromises)
         .then(results => {
             // 全てのルートデータを結合
-            allRoutes = results.flat();
+            allRoutes_kawasaki = results.flat();
             
             // ローカルストレージに保存
-            localStorage.setItem('allRoutes', JSON.stringify(allRoutes));
+            localStorage.setItem('allRoutes_kawasaki', JSON.stringify(allRoutes_kawasaki));
             
             // バス情報を更新
             updateBusInfo();
             
-            console.log(`${files.length}個のCSVファイルを読み込みました:`, allRoutes.length);
+            console.log(`${files.length}個のCSVファイルを読み込みました:`, allRoutes_kawasaki.length);
         })
         .catch(error => {
             console.error('ファイル読み込みエラー:', error);
@@ -357,7 +357,7 @@ function handleFileSelect(event) {
 // サンプルデータのロード（CSVの読み込みに失敗した場合）
 function loadSampleData() {
     // サンプルデータ
-    allRoutes = [
+    allRoutes_kawasaki = [
         { dayType: "平日", hour: 5, minute: 40, time: "05:40", route: "川51", destination: "新網島駅", routeId: "川51", busStop: "60" },
         { dayType: "平日", hour: 6, minute: 12, time: "06:12", route: "川51", destination: "新網島駅", routeId: "川51", busStop: "60" },
         { dayType: "平日", hour: 7, minute: 0, time: "07:00", route: "川51", destination: "新網島駅", routeId: "川51", busStop: "60" },
@@ -375,7 +375,7 @@ function loadSampleData() {
         { dayType: "休日", hour: 6, minute: 22, time: "06:22", route: "川57", destination: "末吉橋矢向循環線", routeId: "川57", busStop: "59" }
     ];
     
-    console.log('サンプルデータをロードしました', allRoutes.length);
+    console.log('サンプルデータをロードしました', allRoutes_kawasaki.length);
     
     // バス情報を更新
     updateBusInfo();
@@ -442,7 +442,7 @@ function findAllSurroundingBuses() {
     };
     
     // 現在の曜日タイプに合致するバスだけをフィルター（正規化済み）
-    const todaysBuses = allRoutes.filter(bus => 
+    const todaysBuses = allRoutes_kawasaki.filter(bus => 
         normalizeType(bus.dayType) === normalizeType(currentDayType));
     
     console.log('利用可能なバス数:', todaysBuses.length);
@@ -592,20 +592,20 @@ function findUpcomingBuses(maxCount = 10) {
     
     // 曜日タイプごとのデータ数をカウント
     const dayTypeCounts = {};
-    allRoutes.forEach(bus => {
+    allRoutes_kawasaki.forEach(bus => {
         const type = bus.dayType;
         dayTypeCounts[type] = (dayTypeCounts[type] || 0) + 1;
     });
     console.log('曜日タイプごとのデータ数:', dayTypeCounts);
     
     // 現在の曜日タイプに合致するバスだけをフィルター
-    const todaysBuses = allRoutes.filter(bus => bus.dayType === currentDayType);
+    const todaysBuses = allRoutes_kawasaki.filter(bus => bus.dayType === currentDayType);
     console.log('利用可能なバス数:', todaysBuses.length);
     
     // データがない場合はサンプルデータを使用
-    if (todaysBuses.length === 0 && allRoutes.length > 0) {
+    if (todaysBuses.length === 0 && allRoutes_kawasaki.length > 0) {
         console.log('指定された曜日タイプのデータがないため、全データを対象にします');
-        return allRoutes
+        return allRoutes_kawasaki
             .sort((a, b) => {
                 if (a.hour !== b.hour) {
                     return a.hour - b.hour;
