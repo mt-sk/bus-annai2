@@ -1,5 +1,5 @@
 // グローバル変数
-let allRoutes = []; // 全てのバス路線データ
+let allRoutes_sanko = []; // 全てのバス路線データ
 let isDevMode = false; // 開発モードフラグ
 let isUpdatingInfo = false; // 更新中フラグ - 無限ループ防止用
 
@@ -30,7 +30,7 @@ function initApp() {
     loadDataFromLocalStorage();
     
     // データがなければ、CSVファイルを読み込む
-    if (allRoutes.length === 0) {
+    if (allRoutes_sanko.length === 0) {
         loadMultipleRoutes();
     } else {
         // バス情報を更新
@@ -164,14 +164,14 @@ function getCurrentDayType() {
 
 // ローカルストレージからデータ読み込み
 function loadDataFromLocalStorage() {
-    const savedRoutes = localStorage.getItem('allRoutes');
+    const savedRoutes = localStorage.getItem('allRoutes_sanko');
     if (savedRoutes) {
         try {
-            allRoutes = JSON.parse(savedRoutes);
-            console.log('ローカルストレージからデータを読み込みました', allRoutes.length);
+            allRoutes_sanko = JSON.parse(savedRoutes);
+            console.log('ローカルストレージからデータを読み込みました', allRoutes_sanko.length);
         } catch (e) {
             console.error('ローカルストレージのデータを解析できませんでした', e);
-            allRoutes = [];
+            allRoutes_sanko = [];
         }
     }
 }
@@ -204,14 +204,14 @@ function loadMultipleRoutes() {
     Promise.all(routeFiles.map(file => loadRouteCSV(file)))
         .then(results => {
             // 全てのルートデータを結合
-            allRoutes = results.flat();
+            allRoutes_sanko = results.flat();
             
             // ローカルストレージに保存
-            localStorage.setItem('allRoutes', JSON.stringify(allRoutes));
+            localStorage.setItem('allRoutes_sanko', JSON.stringify(allRoutes_sanko));
             
             // バス情報を更新
             updateBusInfo();
-            console.log('全てのCSVファイルを読み込みました:', allRoutes.length);
+            console.log('全てのCSVファイルを読み込みました:', allRoutes_sanko.length);
         })
         .catch(error => {
             console.error('ファイル読み込みエラー:', error);
@@ -267,7 +267,7 @@ function handleFileSelect(event) {
     const files = event.target.files;
     if (files.length === 0) return;
     
-    allRoutes = []; // リセット
+    allRoutes_sanko = []; // リセット
     const filePromises = [];
     
     for (let i = 0; i < files.length; i++) {
@@ -297,15 +297,15 @@ function handleFileSelect(event) {
     Promise.all(filePromises)
         .then(results => {
             // 全てのルートデータを結合
-            allRoutes = results.flat();
+            allRoutes_sanko = results.flat();
             
             // ローカルストレージに保存
-            localStorage.setItem('allRoutes', JSON.stringify(allRoutes));
+            localStorage.setItem('allRoutes_sanko', JSON.stringify(allRoutes_sanko));
             
             // バス情報を更新
             updateBusInfo();
             
-            console.log(`${files.length}個のCSVファイルを読み込みました:`, allRoutes.length);
+            console.log(`${files.length}個のCSVファイルを読み込みました:`, allRoutes_sanko.length);
         })
         .catch(error => {
             console.error('ファイル読み込みエラー:', error);
@@ -315,7 +315,7 @@ function handleFileSelect(event) {
 // サンプルデータのロード（新しいデータ構成に対応）
 function loadSampleData() {
     // サンプルデータ
-    allRoutes = [
+    allRoutes_sanko = [
         { dayType: "平日", hour: 6, minute: 2, time: "06:02", route: "川51、53、56", destination: "矢向西町→川崎駅", routeId: "矢向西町", busStop: "矢向西町" },
         { dayType: "平日", hour: 6, minute: 28, time: "06:28", route: "川51、53、56", destination: "矢向西町→川崎駅", routeId: "矢向西町", busStop: "矢向西町" },
         { dayType: "平日", hour: 7, minute: 5, time: "07:05", route: "川51、53、56", destination: "矢向西町→川崎駅", routeId: "矢向西町", busStop: "矢向西町" },
@@ -328,7 +328,7 @@ function loadSampleData() {
         { dayType: "休日", hour: 6, minute: 20, time: "06:20", route: "川54、55", destination: "新鶴見小学校南→川崎駅", routeId: "新鶴見小学校南", busStop: "新鶴見小学校南" }
     ];
     
-    console.log('サンプルデータをロードしました', allRoutes.length);
+    console.log('サンプルデータをロードしました', allRoutes_sanko.length);
     
     // バス情報を更新
     updateBusInfo();
@@ -350,8 +350,8 @@ function updateTimeAndCountdown() {
 // 乗り場別にバスを分類する
 function getBusesByBusStop() {
     // CSVファイル名（routeId）で分類
-    const yakoNishiBuses = allRoutes.filter(bus => bus.routeId === "矢向西町");
-    const shinTsurumiBuses = allRoutes.filter(bus => bus.routeId === "新鶴見小学校南");
+    const yakoNishiBuses = allRoutes_sanko.filter(bus => bus.routeId === "矢向西町");
+    const shinTsurumiBuses = allRoutes_sanko.filter(bus => bus.routeId === "新鶴見小学校南");
     
     return {
         yako: yakoNishiBuses,
