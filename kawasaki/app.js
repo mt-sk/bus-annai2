@@ -3,6 +3,7 @@ let allRoutes_kawasaki = []; // 全てのバス路線データ
 let isDevMode = false; // 開発モードフラグ
 let isUpdatingInfo = false; // 更新中フラグ - 無限ループ防止用
 
+const CSV_VERSION = 1; // CSVファイルのバージョン（CSVを更新したら1ずつ増やす）
 
 let holidayCache = {}; // 祝日判定用の変数を追加
 let holidayDataLoaded = false; // 祝日判定用の変数を追加
@@ -27,8 +28,17 @@ function initApp() {
     // 曜日タイプの表示
     updateDayType();
     
-    // ローカルストレージからデータを読み込む
-    loadDataFromLocalStorage();
+     // バージョンチェック
+    const savedVersion = localStorage.getItem('csvVersion');
+    if (savedVersion !== String(CSV_VERSION)) {
+        console.log('新しいバージョンを検出しました。データを更新します。(v' + savedVersion + ' -> v' + CSV_VERSION + ')');
+        localStorage.removeItem('allRoutes_kawasaki'); // 古いデータを削除
+        localStorage.setItem('csvVersion', CSV_VERSION);
+    } else {
+        // バージョンが同じ場合のみローカルストレージからデータを読み込む
+        loadDataFromLocalStorage();
+    }
+    
     
     // データがなければ、CSVファイルを読み込む
     if (allRoutes_kawasaki.length === 0) {
